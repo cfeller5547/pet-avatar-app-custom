@@ -10,6 +10,8 @@ export default function CreatePetProfileScreen() {
   const setPet = usePetStore((s) => s.setPet);
 
   const [permission, requestPermission] = ImagePicker.useCameraPermissions();
+  const [mediaPermission, requestMediaPermission] =
+    ImagePicker.useMediaLibraryPermissions();
 
   const [name, setName]         = useState('');
   const [species, setSpecies]   = useState<Species>('dog');
@@ -28,6 +30,29 @@ export default function CreatePetProfileScreen() {
       quality: 0.7,
     });
     if (!res.canceled) setPhotoUri(res.assets[0].uri);
+  }
+
+  async function pickFromLibrary() {
+    const { status } = mediaPermission || (await requestMediaPermission());
+    if (status !== 'granted') {
+      Alert.alert('Media library permission is required to choose a photo.');
+      return;
+    }
+
+    const res = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+    if (!res.canceled) setPhotoUri(res.assets[0].uri);
+  }
+
+  function choosePhoto() {
+    Alert.alert('Add Photo', undefined, [
+      { text: 'Take Photo', onPress: capture },
+      { text: 'Choose from Library', onPress: pickFromLibrary },
+      { text: 'Cancel', style: 'cancel' },
+    ]);
   }
 
   function continueNext() {
@@ -64,11 +89,11 @@ export default function CreatePetProfileScreen() {
         ))}
       </View>
 
-      <TouchableOpacity style={styles.photoBox} onPress={capture}>
+      <TouchableOpacity style={styles.photoBox} onPress={choosePhoto}>
         {photoUri ? (
           <Image source={{ uri: photoUri }} style={styles.photo} />
         ) : (
-          <Text>Tap to take photo</Text>
+          <Text>Tap to add photo</Text>
         )}
       </TouchableOpacity>
 
