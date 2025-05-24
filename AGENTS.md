@@ -37,9 +37,3 @@ The workflow is:
 pnpm install          # Node >= 20; pnpm is preferred for determinism
 pnpm expo start --web # web preview (Metro LAN tunnel ok too)
 
-# unit / integration tests (to be added)
-pnpm test
-
-# lint + types
-pnpm run lint
-pnpm run type-check
