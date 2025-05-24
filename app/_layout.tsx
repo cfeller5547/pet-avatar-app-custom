@@ -20,11 +20,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
-            <Stack.Screen name="(onboarding)" />
-            <Stack.Screen name="(main)" />
-            <Stack.Screen name="+not-found" />
-          </Stack>
+          <Stack screenOptions={{ headerShown: false, animation: 'fade' }} />
           <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
         </ThemeProvider>
       </SafeAreaProvider>

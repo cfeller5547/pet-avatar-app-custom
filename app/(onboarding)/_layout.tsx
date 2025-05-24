@@ -5,10 +5,9 @@ export default function OnboardingStack() {
     <Stack
       screenOptions={{
         headerShown: false,
-        presentation: 'modal',   // slide-up iOS feel; remove if you prefer push
+        presentation: 'modal',  
       }}
     >
-      {/* expo-router auto-injects profile/processing routes */}
     </Stack>
   );
 }
