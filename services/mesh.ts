@@ -1,21 +1,11 @@
-const API = 'https://mesh-service.example.com';
+import { Asset } from 'expo-asset';
 
-export async function startMeshJob(photoUri: string, name: string) {
-  const form = new FormData();
-  form.append('photo', {
-    uri: photoUri,
-    type: 'image/jpeg',
-    name: `${name}.jpg`,
-  } as any);
-
-  const res = await fetch(`${API}/mesh`, { method: 'POST', body: form });
-  if (!res.ok) throw new Error('mesh upload failed');
-  const json = await res.json();
-  return json.jobId as string;
+export async function startMeshJob() {
+  return 'mock-id';
 }
-
-export async function pollMeshJob(jobId: string) {
-  const res = await fetch(`${API}/mesh/${jobId}`);
-  if (!res.ok) throw new Error('mesh poll failed');
-  return (await res.json()) as { status: 'queued' | 'processing' | 'done' | 'failed'; meshUrl?: string };
+export async function pollMeshJob() {
+  await new Promise(r => setTimeout(r, 10_000));
+  const asset = Asset.fromModule(require('../assets/meshes/aleu.glb'));
+  await asset.downloadAsync();           
+  return { status: 'done', meshUrl: asset.localUri! };
 }
