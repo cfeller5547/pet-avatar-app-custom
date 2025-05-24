@@ -4,16 +4,24 @@ import { Species, usePetStore } from '@/store/pet';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function CreatePetProfileScreen() {
   const setPet = usePetStore((s) => s.setPet);
+
+  const [permission, requestPermission] = ImagePicker.useCameraPermissions();
 
   const [name, setName]         = useState('');
   const [species, setSpecies]   = useState<Species>('dog');
   const [photoUri, setPhotoUri] = useState<string>();
 
   async function capture() {
+    const { status } = permission || (await requestPermission());
+    if (status !== 'granted') {
+      Alert.alert('Camera permission is required to take a photo.');
+      return;
+    }
+
     const res = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [1, 1],
